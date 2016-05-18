@@ -14,12 +14,12 @@ var users = require('./routes/users');
 
 var app = express();
 
-var host = process.env.HOST_NAME || "localhost:3000";
+var host = process.env.HOST_NAME || "http://localhost:3000";
 
 passport.use(new GoogleStrategy({
     clientID:     process.env.CLIENT_ID,
     clientSecret: process.env.CLIENT_SECRET,
-    callbackURL: `http://${host}/auth/google/return`,
+    callbackURL: `${host}/auth/google/return`,
     passReqToCallback   : true
   },
   function(request, accessToken, refreshToken, profile, done) {
@@ -55,7 +55,8 @@ app.set('view engine', 'jade');
 var sessionOpt = {
   secret: 'cookie_secret',
   name:   'kaas',
-  saveUninitialized: true
+  saveUninitialized: true,
+  resave: false
 }
 
 // uncomment after placing your favicon in /public
