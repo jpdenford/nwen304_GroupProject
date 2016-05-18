@@ -14,11 +14,12 @@ var users = require('./routes/users');
 
 var app = express();
 
+var host = process.env.HOST_NAME || "localhost:3000";
 
 passport.use(new GoogleStrategy({
     clientID:     process.env.CLIENT_ID,
     clientSecret: process.env.CLIENT_SECRET,
-    callbackURL: "http://localhost:3000/auth/google/return",
+    callbackURL: `http://${host}/auth/google/return`,
     passReqToCallback   : true
   },
   function(request, accessToken, refreshToken, profile, done) {
