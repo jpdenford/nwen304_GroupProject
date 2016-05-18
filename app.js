@@ -24,7 +24,7 @@ passport.use(new GoogleStrategy({
     passReqToCallback   : true
   },
   function(request, accessToken, refreshToken, profile, done) {
-    db.User.findOrCreate({ where: {googleId: profile.id }, defaults: {lastAction: new Date()} })
+    db.User.findOrCreate({ where: {googleId: profile.id }, defaults: {lastaction: new Date()} })
       .spread(function (user, created) {
         return done(undefined, user);
     });
@@ -73,9 +73,13 @@ app.get('/auth/google',
 
 app.get( '/auth/google/return',
   passport.authenticate( 'google', {
-    successRedirect: '/auth/google/success',
+    successRedirect: '/users/login/success',
     failureRedirect: '/auth/google/failure'
 }));
+
+app.get('/auth/google/success', function(res, req, next) {
+  res.json({ user: req.user});
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

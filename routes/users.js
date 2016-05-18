@@ -17,4 +17,10 @@ router.get('/login', function(req, res){
   res.render('login', { user: req.user });
 });
 
+router.get('/login/success', function(req, res){
+  res.json({user: req.user});
+});
+
+
+
 module.exports = router;
