@@ -7,6 +7,7 @@ var bodyParser = require('body-parser');
 var passport = require('passport');
 var GoogleStrategy = require( 'passport-google-oauth2' ).Strategy;
 var session = require('express-session');
+var db = require('./lib/db');
 
 
 var routes = require('./routes/index');
@@ -23,8 +24,9 @@ passport.use(new GoogleStrategy({
     passReqToCallback   : true
   },
   function(request, accessToken, refreshToken, profile, done) {
-    User.findOrCreate({ googleId: profile.id }, function (err, user) {
-      return done(err, user);
+    db.User.findOrCreate({ where: {googleId: profile.id }, defaults: {lastAction: new Date()} })
+      .spread(function (user, created) {
+        return done(undefined, user);
     });
   }
 ));
@@ -37,16 +39,6 @@ passport.deserializeUser(function(obj, done) {
   done(null, obj);
 });
 
-app.get('/auth/google',
-  passport.authenticate('google', { scope: 
-    [ 'https://www.googleapis.com/auth/userinfo.profile' ] }
-));
- 
-app.get( '/auth/google/return', 
-  passport.authenticate( 'google', { 
-    successRedirect: '/auth/google/success',
-    failureRedirect: '/auth/google/failure'
-}));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -62,17 +54,28 @@ var sessionOpt = {
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
+app.use(cookieParser(sessionOpt.secret));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser(sessionOpt.secret));
 app.use(session(sessionOpt));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(passport.initialize());
+app.use(passport.session());
 
-app.use( passport.initialize());
-app.use( passport.session());
 
 app.use('/', routes);
 app.use('/users', users);
+
+app.get('/auth/google',
+  passport.authenticate('google', { scope:
+    [ 'https://www.googleapis.com/auth/userinfo.profile' ] }
+));
+
+app.get( '/auth/google/return',
+  passport.authenticate( 'google', {
+    successRedirect: '/auth/google/success',
+    failureRedirect: '/auth/google/failure'
+}));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
