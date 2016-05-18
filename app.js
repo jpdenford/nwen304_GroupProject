@@ -24,8 +24,14 @@ passport.use(new GoogleStrategy({
     passReqToCallback   : true
   },
   function(request, accessToken, refreshToken, profile, done) {
-    db.User.findOrCreate({ where: {googleId: profile.id }, defaults: {lastaction: new Date()} })
-      .spread(function (user, created) {
+    console.log(profile);
+    var profile = profile._json;
+    db.User.findOrCreate({ 
+      where: {
+        googleId: profile.id, displayName: profile.displayName, imageUrl: profile.image.url 
+      }, defaults: {lastaction: new Date()} 
+    }).spread(function (user, created) {
+        user.profile = profile;
         return done(undefined, user);
     });
   }
@@ -76,10 +82,6 @@ app.get( '/auth/google/return',
     successRedirect: '/users/login/success',
     failureRedirect: '/auth/google/failure'
 }));
-
-app.get('/auth/google/success', function(res, req, next) {
-  res.json({ user: req.user});
-});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

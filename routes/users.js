@@ -18,7 +18,7 @@ router.get('/login', function(req, res){
 });
 
 router.get('/login/success', function(req, res){
-  res.json({user: req.user});
+  res.render('success', {user: req.user });
 });
 
 
