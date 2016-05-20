@@ -8,6 +8,7 @@ var passport = require('passport');
 var GoogleStrategy = require( 'passport-google-oauth2' ).Strategy;
 var session = require('express-session');
 var db = require('./lib/db');
+var url = require('url');
 
 
 var routes = require('./routes/index');
@@ -57,6 +58,16 @@ var sessionOpt = {
   resave: false
 }
 
+//force https in production
+app.get('*',function(req,res,next){
+  if( app.get('env') !== 'development' && req.protocol !=='https' ){
+    res.redirect('https://'+ req.get('host') + req.originalUrl );
+  }
+  else{
+    next();
+  }
+})
+
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
@@ -67,6 +78,7 @@ app.use(session(sessionOpt));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(passport.initialize());
 app.use(passport.session());
+
 
 
 app.use('/', routes);
