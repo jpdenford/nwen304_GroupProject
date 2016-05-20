@@ -1,5 +1,9 @@
 # NWEN304 Group Assignment
 
+David Barnett
+Josh Gomez
+John-Paul Denford
+
 ## Database
 
 Use `postgres` version 9.5 or above.
