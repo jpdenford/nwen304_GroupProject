@@ -12,6 +12,7 @@ var url = require('url');
 
 
 var routes = require('./routes/index');
+var api = require('./routes/api/index');
 var users = require('./routes/users');
 
 var app = express();
@@ -98,6 +99,7 @@ app.use(passport.session());
 
 
 app.use('/', routes);
+app.use('/api', api);
 app.use('/users', users);
 
 app.get('/auth/google',
