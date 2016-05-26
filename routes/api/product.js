@@ -1,13 +1,13 @@
 var express = require('express');
 var router = express.Router();
-var models = require('../../lib/db'); 
-var auth = require('../../lib/auth');
+var models = require('../../lib/db');
+var helper = require('../../lib/helper');
 
 // setup param validation and pre-fetch the product for the routes related to it
 router.param('id', function (req, res, next, param) {
   // try to convert to int
   var id = parseInt(param);
-  
+
   // make sure the id is even remotely possibly valid
   if (isNaN(id) || id <= 0) {
     res.status(400).json({sucess: false, error: "invalid id"});
@@ -35,13 +35,25 @@ router.get('/', function(req, res, next) {
   });
 });
 
-// POST /new
+// POST /
 // Create new product
 // Only admins can create new products
-router.post('/new', function(req, res, next) {
-  console.log(req.body);
+router.post('/', helper.isAuthenicatedAdmin, function(req, res, next) {
 
-  res.json({success: false});
+  // make sure we got all the parameters for the CREATE
+  if (!req.body || !req.body.price || !req.body.name) {
+    res.status(400).json({success: false, error: "Not all arguments are present"});
+    return;
+  }
+
+  models.Helper.createProduct(req.body, function(err, prod) {
+      if (err) {
+        res.status(400).json({success: false, error: err.error});
+        return;
+      }
+
+      res.json({success: true, data: prod});
+    });
 });
 
 // GET /:id
@@ -51,30 +63,33 @@ router.get('/:id', function(req, res, next) {
   res.json(req.product);
 });
 
-// PATCH /:id 
+// PUT /:id
 // Update one product
 // Only an admin can update an item
-router.patch('/:id', auth.isAuthenicatedAdmin, function(req, res, next) {
+router.put('/:id', helper.isAuthenicatedAdmin, function(req, res, next) {
 
-  // make sure we got all the parameters for the PATCH
+  // make sure we got all the parameters for the PUT
   if (!req.body || !req.body.price || !req.body.name) {
     res.status(400).json({success: false, error: "Not all arguments are present"});
     return;
   }
 
   // validate
-  models.Product.updateInstance(req.product, req.body, function(err, prod) {
+  models.Helper.updateProduct(req.product, req.body, function(err, prod) {
     if (err) {
       res.status(400).json({success: false, error: err.error});
+      return;
     }
-    res.json(prod);
+
+    res.json({ success: true, data: prod});
   });
 });
 
 // DELETE /:id
 // delete one product
 // Only admin can delete an item
-router.delete('/:id', auth.isAuthenicatedAdmin, function(req, res, next) {
+router.delete('/:id', helper.isAuthenicatedAdmin, function(req, res, next) {
+  res.json({ success: true, data: req.product});
   req.product.destroy();
 });
 

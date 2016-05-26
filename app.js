@@ -26,12 +26,12 @@ passport.use(new GoogleStrategy({
     passReqToCallback   : true
   },
   function(request, accessToken, refreshToken, profile, done) {
-    //console.log(profile);
     var profile = profile._json;
+
     db.User.findOrCreate({ 
       where: {
         googleId: profile.id, displayName: profile.displayName, imageUrl: profile.image.url 
-      }, defaults: {lastaction: new Date()} 
+      }, defaults: {lastaction: new Date(), isAdmin: false} 
     }).spread(function (user, created) {
         user.profile = profile;
 
@@ -143,6 +143,5 @@ app.use(function(err, req, res, next) {
     error: {}
   });
 });
-
 
 module.exports = app;
