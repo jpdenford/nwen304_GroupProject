@@ -60,7 +60,7 @@ router.post('/', helper.isAuthenicatedAdmin, function(req, res, next) {
 // Get an individual item
 // Anyone can get this
 router.get('/:id', function(req, res, next) {
-  res.json(req.product);
+  res.json({ success: true, data: req.product });
 });
 
 // PUT /:id
