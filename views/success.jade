@@ -3,7 +3,9 @@ extends layout
 block content
   h1 Hello #{user.displayName}
   img(src=user.imageUrl)
+
+  h2 Cart
   ul
     each cart in carts
-      li #{cart.quantity}
+      li #{cart.product.name} $#{cart.product.price} x#{cart.quantity}
 

@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var helper = require('../lib/helper');
+var models = require('../lib/db');
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
@@ -22,11 +23,7 @@ router.get('/login/success',
            helper.authedOrLogin,
            function(req, res) {
 
-  req.user.getCarts().then(function (carts) {
-      console.log(carts);
-      for (var i = 0; i < carts.length; i++) {
-          //console.log(carts[i].toJSON());
-      }
+  req.user.getCarts({ include: [ models.Product ] }).then(function (carts) {
       res.render('success', {user: req.user, carts: carts });
   });
 });
