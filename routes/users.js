@@ -21,7 +21,7 @@ router.get('/login/success', function(req, res){
    // console.log(req.user);
   req.user.getCarts().then(function (carts){
       console.log(carts);
-      for (var i = 0; i <= carts.length; i++) {
+      for (var i = 0; i < carts.length; i++) {
           //console.log(carts[i].toJSON());
       }
       res.render('success', {user: req.user, carts: carts });

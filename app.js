@@ -41,11 +41,11 @@ passport.use(new GoogleStrategy({
               }, defaults: {quantity: 0}
           }).spread(function (cart, created){
               cart.quantity += 1;
-              cart.save();
+              cart.save().then(function(){
+                  done(undefined, user);
+              });
           });
         });
-
-        return done(undefined, user);
     });
   }
 ));
