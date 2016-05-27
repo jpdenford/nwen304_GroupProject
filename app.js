@@ -25,7 +25,7 @@ passport.use(new GoogleStrategy({
     passReqToCallback   : true
   },
   function(request, accessToken, refreshToken, profile, done) {
-    console.log(profile);
+    //console.log(profile);
     var profile = profile._json;
     db.User.findOrCreate({ 
       where: {
@@ -33,17 +33,33 @@ passport.use(new GoogleStrategy({
       }, defaults: {lastaction: new Date()} 
     }).spread(function (user, created) {
         user.profile = profile;
+
+        db.Product.findAll().then(function(prods){
+          db.Cart.findOrCreate({
+              where: {
+                  user_id: user.id, product_id: prods[0].id
+              }, defaults: {quantity: 0}
+          }).spread(function (cart, created){
+              cart.quantity += 1;
+              cart.save();
+          });
+        });
+
         return done(undefined, user);
     });
   }
 ));
 
 passport.serializeUser(function(user, done) {
-  done(null, user);
+  //console.log("searial:" + user);
+  done(null, user.id);
 });
 
 passport.deserializeUser(function(obj, done) {
-  done(null, obj);
+  //console.log("obl:" +  obj);
+    db.User.findById(obj).then(function(user) {
+        done(null, user);
+    });
 });
 
 

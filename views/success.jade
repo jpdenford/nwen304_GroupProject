@@ -3,4 +3,7 @@ extends layout
 block content
   h1 Hello #{user.displayName}
   img(src=user.imageUrl)
+  ul
+    each cart in carts
+      li #{cart.quantity}
 
