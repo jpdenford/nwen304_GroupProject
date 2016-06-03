@@ -28,6 +28,14 @@ router.get('/login/success',
   });
 });
 
+router.get('/cart',
+            helper.authedOrLogin,
+            function (req, res){
+
+   req.user.getCarts({ include: [ models.Product ] }).then(function (carts) {
+      res.render('cart', {user: req.user, carts: carts });
+   });
+});
 
 
 module.exports = router;

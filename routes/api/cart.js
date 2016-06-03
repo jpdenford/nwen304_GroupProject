@@ -55,7 +55,7 @@ router.post('/buy', function(req, res, next) {
       for (var i = 0; i < carts.length; i++) {
         var cart = carts[i];
 
-        receip.total += cart.product.price * cart.quantity;
+        receipt.total += cart.product.price * cart.quantity;
 
         receipt.items.push({
           name: cart.product.name,

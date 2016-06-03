@@ -1,0 +1,12 @@
+extends layout
+
+block content
+    h1 This is your cart
+    ul
+      each cart in carts
+        li #{cart.product.name} $#{cart.product.price} x#{cart.quantity}
+    button(onClick="checkout()").
+        Checkout
+
+block javascript
+    script(src="/scripts/cart.js")
