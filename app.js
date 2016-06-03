@@ -76,7 +76,7 @@ var sessionOpt = {
 }
 
 //force https in production
-app.get('*',function(req,res,next){
+app.use('*',function(req,res,next){
   if( app.get('env') !== 'development' && req.headers['x-forwarded-proto'] != 'https' ){
     res.redirect('https://'+ req.get('host') + req.originalUrl );
   }
