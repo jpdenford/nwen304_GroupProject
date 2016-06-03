@@ -7,6 +7,7 @@ var bodyParser = require('body-parser');
 var passport = require('passport');
 var GoogleStrategy = require( 'passport-google-oauth2' ).Strategy;
 var session = require('express-session');
+var cacheResponseDirective = require('express-cache-response-directive');
 var db = require('./lib/db');
 var url = require('url');
 
@@ -92,7 +93,8 @@ app.use(cookieParser(sessionOpt.secret));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(session(sessionOpt));
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public'),{ maxAge: '6h'}));
+app.use(cacheResponseDirective());
 app.use(passport.initialize());
 app.use(passport.session());
 
