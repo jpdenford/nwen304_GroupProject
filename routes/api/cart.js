@@ -9,6 +9,7 @@ router.use(helper.isAuthenicated);
 // resolve the id given to be an item in current user's cart
 // also inlcudes the product the cart item is about
 router.param('id', function (req, res, next, param) {
+
   // try to convert to int
   var id = parseInt(param);
 
@@ -41,10 +42,72 @@ router.get('/', function(req, res, next) {
   });
 });
 
+// POST /buy
+// Buy all items in the cart and
+router.post('/buy', function(req, res, next) {
+  req.user.getCarts({ include: [ models.Product ] }).then(function (carts) {
+      if (carts.length <= 0) {
+        res.json({ success: false, error: 'no items in cart' });
+        return;
+      }
+
+      var receipt = { total: 0, items: [] };
+      for (var i = 0; i < carts.length; i++) {
+        var cart = carts[i];
+
+        receip.total += cart.product.price * cart.quantity;
+
+        receipt.items.push({
+          name: cart.product.name,
+          quantity: cart.quantity,
+          price: cart.product.price
+        });
+
+        cart.destroy();
+      }
+
+      res.json({ success: true, data: receipt });
+  });
+});
+
 // GET /:id
 // Get item in cart with id
 router.get('/:id', function(req, res, next) {
   res.json({ success: true, data: req.cart });
+});
+
+// POST /:id
+// Create cart item, if it already exists increase the quantity by one
+router.post('/', function(req, res, next) {
+
+  if (!req.body || !req.body.product_id) {
+    res.status(400).json({success: false, error: 'missing arguments'});
+    return;
+  }
+
+  var quantity = parseInt(req.body.quantity);
+  var product_id = parseInt(req.body.product_id);
+
+  if (isNaN(product_id) || product_id <= 0) {
+    res.status(400).json({success: false, error: 'incorrect arguments'});
+    return;
+  }
+
+  models.Cart.findOrCreate({
+    where: {
+      user_id: req.user.id, product_id: product_id
+    }, defaults: { quantity: 0 }
+  }).spread(function (cart) {
+    if (!cart) {
+      return;
+    }
+    cart.quantity += 1;
+    cart.save().then(function(){
+      res.json({ success: true, data: cart });
+    });
+  }).catch(function(e) {
+    res.status(400).json({success: false, error: 'incorrect arguments'});
+  });
 });
 
 // PATCH /:id
@@ -68,6 +131,8 @@ router.patch('/:id', function(req, res, next) {
 
   req.cart.save().then(function (cart) {
     res.json({ success: true, data: cart });
+  }).catch(function (err) {
+    res.status(400).json({success: false, error: 'incorrect arguments'});
   });
 
 });
@@ -75,8 +140,9 @@ router.patch('/:id', function(req, res, next) {
 // DELETE /:id
 // Delete an item in the cart
 router.delete('/:id', function(req, res, next) {
-  req.cart.destroy();
-  res.json({ success: true, data: req.cart });
+  req.cart.destroy().then(function() {
+    res.json({ success: true, data: req.cart });
+  });
 });
 
 // TODO: Should there be helper API calls for +1/-1 to cart item
