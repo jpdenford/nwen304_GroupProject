@@ -9,6 +9,7 @@ var GoogleStrategy = require( 'passport-google-oauth2' ).Strategy;
 var session = require('express-session');
 var cacheResponseDirective = require('express-cache-response-directive');
 var db = require('./lib/db');
+var helper = require('./lib/helper');
 var url = require('url');
 
 
@@ -54,7 +55,9 @@ passport.use(new GoogleStrategy({
 
 passport.serializeUser(function(user, done) {
   //console.log("searial:" + user);
-  done(null, user.id);
+  user.update({fields: ["lastaction"]}).then(function() {
+    done(null, user.id);
+  });
 });
 
 passport.deserializeUser(function(obj, done) {
@@ -100,6 +103,7 @@ app.use(passport.session());
 
 
 
+app.use(helper.isTimedOut);
 app.use('/', routes);
 app.use('/api', api);
 app.use('/users', users);
