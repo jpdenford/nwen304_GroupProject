@@ -4,3 +4,13 @@ block content
   h1= title
   p Welcome to #{title}
   a(href='/') click here to go home
+    a(href= "users/login") Login
+  ul
+    each product in products
+      li !{product.name}
+        button(onClick = 'addItem(#{product.id})').
+          Add to Cart
+
+block javascript
+    script(src="/scripts/index.js")
+
