@@ -15,6 +15,7 @@ router.get('/', function(req, res, next) {
   //     });
   //     return;
   //   }
+  res.cacheControl({ maxAge: 10, 'public': true });
   res.render('index', { title: 'Express' });
 });
 
