@@ -4,8 +4,12 @@ block content
   h1= title
   p Welcome to #{title}
   a(href='/') click here to go home
-    a(href= "users/login") Login
+  br
+  a(href= "users/login") Login
+  br
   a(href= "users/cart") View Cart
+  br
+  a(href= "users/logout") Logout
   ul
     each product in products
       li !{product.name}

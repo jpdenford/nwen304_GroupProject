@@ -5,6 +5,7 @@ block content
     ul
       each cart in carts
         li #{cart.product.name} $#{cart.product.price} x#{cart.quantity}
+          button(OnClick="removeItem(#{cart.id})") Remove
     button(onClick="checkout()").
         Checkout
 

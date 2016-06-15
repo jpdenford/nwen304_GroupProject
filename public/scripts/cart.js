@@ -9,6 +9,15 @@ function checkout(){
     }).then(success(),ERROR_LOG);
 }
 
+function removeItem(id){
+    console.log("Removing Item")
+    $.ajax({
+        method: 'DELETE',
+        url: "/api/cart/"+id,
+    }).then(success(), ERROR_LOG);
+}
+
 function success(){
     console.log("Success");
+    
 }
