@@ -3,7 +3,7 @@ mixin navbar(user)
     ul
       if user
         li
-          p Welcome #{user.name}
+          p Welcome #{user.displayName}
       //- attributes == {class: "btn"}
       li
         a(class!=attributes.class, href='/') Home
