@@ -4,8 +4,12 @@ html
     title= title
     link(rel='stylesheet', href='/stylesheets/style.css')
   body
+    include ./includes/navbar
+    +navbar(user)
     block content
 
   footer
     script(src="https://code.jquery.com/jquery-2.2.4.min.js")
+    script(src="http://www.geoplugin.net/javascript.gp")
+    script(src="/javascripts/suggest.js")
     block javascript

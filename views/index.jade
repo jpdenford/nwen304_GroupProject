@@ -1,13 +1,11 @@
 extends layout
 
 block content
-  include ./includes/navbar
-  +navbar(user)
   h1= title
   p Welcome to #{title}
   ul
     each product in products
-      li !{product.name}
+      li(id="product_#{product.id}") !{product.name}
         button(onClick = 'addItem(#{product.id})').
           Add to Cart
 
