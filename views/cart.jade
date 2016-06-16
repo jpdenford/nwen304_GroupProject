@@ -2,9 +2,10 @@ extends layout
 
 block content
     h1 This is your cart
+    a(href='/') Click here to go home
     ul
       each cart in carts
-        li #{cart.product.name} $#{cart.product.price} x#{cart.quantity}
+        li(class= '#{cart.id}') #{cart.product.name} $#{cart.product.price} x#{cart.quantity}
           button(OnClick="removeItem(#{cart.id})") Remove
     button(onClick="checkout()").
         Checkout
