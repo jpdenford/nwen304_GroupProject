@@ -67,13 +67,11 @@ router.get('/suggest', function(req, res, next) {
       tags.push("cloud");
     }
 
-    models.Tag.findAll({where: { $or: { name: tags  }}, include: [models.Product]})
+    models.Tag.findAll({where: { $or: { name: tags  }}})
       .then(function(data) {
         res.json({success: true, data: data});
       });
-
   }).catch(function(err) {
-    console.log(":(");
     res.json({success: false, error: err});
   });
 });
