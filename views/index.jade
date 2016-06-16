@@ -1,15 +1,10 @@
 extends layout
 
 block content
+  include ./includes/navbar
+  +navbar(user)
   h1= title
   p Welcome to #{title}
-  a(href='/') click here to go home
-  br
-  a(href= "users/login") Login
-  br
-  a(href= "users/cart") View Cart
-  br
-  a(href= "users/logout") Logout
   ul
     each product in products
       li !{product.name}
@@ -19,4 +14,3 @@ block content
 
 block javascript
     script(src="/scripts/index.js")
-

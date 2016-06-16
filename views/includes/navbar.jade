@@ -1,0 +1,17 @@
+mixin navbar(user)
+  #navbar
+    ul
+      if user
+        li
+          p Welcome #{user.name}
+      //- attributes == {class: "btn"}
+      li
+        a(class!=attributes.class, href='/') Home
+      li
+        if user
+          a(class!=attributes.class, href='/users/logout') logout
+        else
+          a(class!=attributes.class, href='/auth/google') login
+      if user
+        li(class='cart')
+          a(class!=attributes.class, href='/users/cart') cart
