@@ -35,6 +35,7 @@
     "pg-hstore": "^2.3.2",
     "pg-native": "^1.10.0",
     "sequelize": "^3.23.1",
-    "serve-favicon": "~2.3.0"
+    "serve-favicon": "~2.3.0",
+    "yahoo-weather": "^2.0.5"
   }
 }

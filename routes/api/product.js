@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var models = require('../../lib/db');
 var helper = require('../../lib/helper');
+var weather = require('yahoo-weather');
 
 // setup param validation and pre-fetch the product for the routes related to it
 router.param('id', function (req, res, next, param) {
@@ -32,6 +33,48 @@ router.param('id', function (req, res, next, param) {
 router.get('/', function(req, res, next) {
   models.Product.findAll().then(function(products) {
     res.json({success: true, data: products});
+  });
+});
+
+router.get('/suggest', function(req, res, next) {
+  console.log(req.query);
+  if (!req.query.city) {
+    res.json({success: false, error: "no city supplied"});
+    return;
+  }
+  var city = req.query.city;
+
+  weather(city, "c").then(function(data) {
+    var current = data.item.condition;
+    var tags = ["all"];
+
+    if (current.temp >= 20) {
+      tags.push("hot");
+    } else if (current.temp <= 10) {
+      // cold
+      tags.push("cold");
+    } else {
+      tags.push("meh");
+    }
+
+    if (current.text === "Sunny") {
+      // sun
+      tags.push("sun");
+    } else if (current.text === "Windy") {
+      // windy
+      tags.push("wind");
+    } else {
+      tags.push("cloud");
+    }
+
+    models.Tag.findAll({where: { $or: { name: tags  }}, include: [models.Product]})
+      .then(function(data) {
+        res.json({success: true, data: data});
+      });
+
+  }).catch(function(err) {
+    console.log(":(");
+    res.json({success: false, error: err});
   });
 });
 
