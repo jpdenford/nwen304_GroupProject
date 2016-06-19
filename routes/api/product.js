@@ -4,6 +4,8 @@ var models = require('../../lib/db');
 var helper = require('../../lib/helper');
 var weather = require('yahoo-weather');
 
+var MostPopularItemSQL = "SELECT products.id, SUM(order_entities.quantity) AS quantity FROM order_entities INNER JOIN products ON order_entities.name=products.name GROUP BY products.id ORDER BY quantity DESC LIMIT 3";
+
 // setup param validation and pre-fetch the product for the routes related to it
 router.param('id', function (req, res, next, param) {
   // try to convert to int
@@ -69,7 +71,19 @@ router.get('/suggest', function(req, res, next) {
 
     models.Tag.findAll({where: { $or: { name: tags  }}})
       .then(function(data) {
-        res.json({success: true, data: data});
+        var sequelize = models.Sequelize;
+        sequelize.query(MostPopularItemSQL, { type: sequelize.QueryTypes.SELECT})
+          .then(function(popular) {
+            console.log(popular);
+
+            for (var i = 0; i < popular.length; i++ ) {
+              data.push({
+                product_id: popular[i].id
+              });
+            }
+
+            res.json({success: true, data: data});
+          });
       });
   }).catch(function(err) {
     res.json({success: false, error: err});
@@ -88,13 +102,13 @@ router.post('/', helper.isAuthenicatedAdmin, function(req, res, next) {
   }
 
   models.Helper.createProduct(req.body, function(err, prod) {
-      if (err) {
-        res.status(400).json({success: false, error: err.error});
-        return;
-      }
+    if (err) {
+      res.status(400).json({success: false, error: err.error});
+      return;
+    }
 
-      res.json({success: true, data: prod});
-    });
+    res.json({success: true, data: prod});
+  });
 });
 
 // GET /:id
