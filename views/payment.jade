@@ -1,0 +1,12 @@
+extends layout
+
+block content
+    #content
+        h1 Purchasing these items
+        each cart in carts
+            li(id= '#{cart.id}') #{cart.product.name} $#{cart.product.price} x#{cart.quantity}
+        h3 Total = $#{total}
+        button(onClick="checkout()") Confirm
+
+block javascript
+    script(src="/scripts/cart.js")

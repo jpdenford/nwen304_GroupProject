@@ -15,8 +15,10 @@ router.get('/', function(req, res, next) {
   //     });
   //     return;
   //   }
-  res.cacheControl({ maxAge: 10, 'public': true });
-  res.render('index', { title: 'Express' });
+  db.Product.findAll().then(function(products){
+    res.render('index', { title: 'Shop', products: products, user: req.user });
+  });
 });
+
 
 module.exports = router;

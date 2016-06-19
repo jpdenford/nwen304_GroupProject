@@ -3,4 +3,15 @@ extends layout
 block content
   h1= title
   p Welcome to #{title}
-  a(href='/') click here to go home
+  ul
+    each product in products
+      li(id="product_#{product.id}") !{product.name}
+        if user
+          button(onClick = 'addItem(#{product.id})').
+            Add to Cart
+
+
+block javascript
+    script(src="http://www.geoplugin.net/javascript.gp")
+    script(src="/scripts/suggest.js")
+    script(src="/scripts/index.js")

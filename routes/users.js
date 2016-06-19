@@ -16,18 +16,46 @@ router.get('/logout', function(req, res){
 
 // GET /users/login
 router.get('/login', function(req, res){
-  res.render('login', { user: req.user });
+  res.redirect('/auth/google');
 });
 
-router.get('/login/success', 
+router.get('/profile', 
            helper.authedOrLogin,
            function(req, res) {
 
   req.user.getCarts({ include: [ models.Product ] }).then(function (carts) {
-      res.render('success', {user: req.user, carts: carts });
+      models.Order.findAll({
+          where: {
+              user_id: req.user.id
+          },
+          include: [models.OrderEntity]
+      }).then(function(orders){
+          res.render('success', {user: req.user, carts: carts, orders: orders });
+      });
   });
 });
 
+router.get('/cart',
+            helper.authedOrLogin,
+            function (req, res){
+
+   req.user.getCarts({ include: [ models.Product ] }).then(function (carts) {
+      res.render('cart', {user: req.user, carts: carts });
+   });
+});
+
+router.get('/confirm',
+    helper.authedOrLogin,
+    function(req, res) {
+            req.user.getCarts({include: [models.Product]}).then(function (carts) {
+            var total = 0;
+            for(var i = 0; i < carts.length; i++){
+                total += carts[i].product.price * carts[i].quantity;
+            }
+            console.log(total)
+            res.render('payment', {user: req.user, carts: carts, total: total});
+        });
+    });
 
 
 module.exports = router;

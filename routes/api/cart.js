@@ -21,16 +21,16 @@ router.param('id', function (req, res, next, param) {
   // Get the requested cart id and restrict by user_id, so only owner can view it
   models.Cart.findOne({ where: { id: id, user_id: req.user.id }, include: [ models.Product ] })
     .then(function(cart) {
-    // make sure cart is valid
-    if (cart === null) {
-      // nope, not found, pretends resouce does not exist when it is not your cart
-      res.status(404).json({success: false, error: `cart with ${id} does not exist`});
-    } else {
-      // got it, onwards with the show
-      req.cart = cart;
-      next();
-    }
-  });
+      // make sure cart is valid
+      if (cart === null) {
+        // nope, not found, pretends resouce does not exist when it is not your cart
+        res.status(404).json({success: false, error: `cart with ${id} does not exist`});
+      } else {
+        // got it, onwards with the show
+        req.cart = cart;
+        next();
+      }
+    });
 });
 
 // PATCH /
@@ -38,35 +38,45 @@ router.param('id', function (req, res, next, param) {
 router.get('/', function(req, res, next) {
   models.Cart.findAll({ where: { user_id: req.user.id }, include: [ models.Product ] })
     .then(function(carts) {
-    res.json({success: true, data: carts});
-  });
+      res.json({success: true, data: carts});
+    });
 });
 
 // POST /buy
 // Buy all items in the cart and
 router.post('/buy', function(req, res, next) {
   req.user.getCarts({ include: [ models.Product ] }).then(function (carts) {
-      if (carts.length <= 0) {
-        res.json({ success: false, error: 'no items in cart' });
-        return;
-      }
+    if (carts.length <= 0) {
+      res.json({ success: false, error: 'no items in cart' });
+      return;
+    }
+    var total_price = 0;
+    for (var i = 0; i < carts.length; i++) {
+      var cart = carts[i];
+      total_price += cart.product.price * cart.quantity;
+    }
 
-      var receipt = { total: 0, items: [] };
+    models.Order.create({
+      user_id: req.user.id,
+      price: total_price
+    }).then(function (order) {
+      var orderEnities = [];
       for (var i = 0; i < carts.length; i++) {
         var cart = carts[i];
 
-        receip.total += cart.product.price * cart.quantity;
-
-        receipt.items.push({
-          name: cart.product.name,
+        orderEnities.push({
+          order_id: order.id,
           quantity: cart.quantity,
-          price: cart.product.price
+          total_price: cart.product.price *  cart.quantity,
+          name: cart.product.name
         });
-
-        cart.destroy();
       }
-
-      res.json({ success: true, data: receipt });
+      models.Cart.destroy({where: { user_id: req.user.id  }}).then(function() {
+        models.OrderEntity.bulkCreate(orderEnities).then(function(orderEntities) {
+          res.json({ success: true, data: orderEntities });
+        });
+      });
+    });
   });
 });
 

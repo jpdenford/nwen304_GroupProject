@@ -93,7 +93,7 @@ app.use(cookieParser(sessionOpt.secret));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(session(sessionOpt));
-app.use(express.static(path.join(__dirname, 'public'),{ maxAge: '6h'}));
+app.use(express.static(path.join(__dirname, 'public'),{ maxAge: '24h'}));
 app.use(cacheResponseDirective());
 app.use(passport.initialize());
 app.use(passport.session());
@@ -111,7 +111,7 @@ app.get('/auth/google',
 
 app.get( '/auth/google/return',
   passport.authenticate( 'google', {
-    successRedirect: '/users/login/success',
+    successRedirect: '/users/profile',
     failureRedirect: '/auth/google/failure'
 }));
 

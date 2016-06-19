@@ -1,0 +1,19 @@
+mixin navbar(user)
+  #navbar
+    ul
+      if user
+        li
+          p Welcome #{user.displayName}
+      //- attributes == {class: "btn"}
+      li
+        a(class!=attributes.class, href='/') Home
+      if user
+        li(class='cart')
+          a(class!=attributes.class, href='/users/cart') Cart
+        li(class='profile')
+          a(class!=attributes.class, href='/users/profile') Profile
+      li
+        if user
+          a(class!=attributes.class, href='/users/logout') Logout
+        else
+          a(class!=attributes.class, href='/users/login') Login
