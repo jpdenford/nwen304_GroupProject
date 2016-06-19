@@ -9,7 +9,12 @@ function checkout(){
         //Need to do shit to show receipt now
         console.log(data);
         $("#content").html("<h2> Thank you </h2>");
-        $("#content").append("<p>You spent: $" + data.data.total + "<br> This will go towards our student loan debts :)</p>")
+
+        var total = 0;
+        for (var i = 0; i < data.data.length; i++) {
+          total += data.data[i].total_price;
+        }
+        $("#content").append("<p>You spent: $" + total + "<br> This will go towards our student loan debts :)</p>")
     },ERROR_LOG);
 }
 
