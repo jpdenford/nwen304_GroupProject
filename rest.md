@@ -12,6 +12,8 @@ Parameters: None
 
 Requirements: None
 
+Cached: Yes, for 30 minutes
+
 Response
 
 Status: `200`
@@ -31,6 +33,8 @@ Endpoint: `/api/products/suggest?city=<city>`
 Method: `GET`
 
 Requirements: None
+
+Cached: Yes, for N-minutes
 
 Parameters:
 
@@ -57,6 +61,8 @@ Endpoint: `/api/products/`
 Method: `POST`
 
 Requirements: Logged in as administrator
+
+Cached: No
 
 Parameters:
 
@@ -96,6 +102,8 @@ Method: `GET`
 
 Requirements: None
 
+Cached: Yes, for 30 minutes
+
 Parameters:
 
 | Name | value |
@@ -131,6 +139,8 @@ Endpoint: `/api/products/:id`
 Method: `PUT`
 
 Requirements: Logged in as administrator
+
+Cached: No
 
 Parameters:
 
@@ -177,6 +187,8 @@ Endpoint: `/api/products/:id`
 Method: `DELETE`
 
 Requirements: Logged in as administrator
+
+Cached: No
 
 Parameters:
 
@@ -225,6 +237,8 @@ Method: `GET`
 
 Requirements: Authenticated user
 
+Cached: No
+
 Parameters: None
 
 Response
@@ -246,6 +260,8 @@ Endpoint: `/api/cart`
 Method: `POST`
 
 Requirements: Logged in as administrator
+
+Cached: No
 
 Parameters:
 
@@ -272,6 +288,8 @@ Method: `POST`
 
 Requirements: Logged in as administrator
 
+Cached: No
+
 Parameters: None
 
 Response
@@ -291,6 +309,8 @@ Endpoint: `/api/cart/:id`
 Method: `GET`
 
 Requirements: None
+
+Cached: No
 
 Parameters:
 
@@ -326,6 +346,8 @@ Method: `POST`
 
 Requirements: None
 
+Cached: No
+
 Parameters:
 
 | Name | value |
@@ -360,6 +382,8 @@ Endpoint: `/api/cart/:id`
 Method: `DELETE`
 
 Requirements: None
+
+Cached: No
 
 Parameters:
 
