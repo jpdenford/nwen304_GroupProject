@@ -111,7 +111,7 @@ app.get('/auth/google',
 
 app.get( '/auth/google/return',
   passport.authenticate( 'google', {
-    successRedirect: '/users/login/success',
+    successRedirect: '/users/profile',
     failureRedirect: '/auth/google/failure'
 }));
 
