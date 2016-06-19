@@ -1,6 +1,3 @@
-/**
- * Created by Josh on 3/06/2016.
- */
 var ERROR_LOG = console.error.bind(console);
 
 function addItem(id){

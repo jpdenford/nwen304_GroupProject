@@ -2,13 +2,17 @@ extends layout
 
 block content
     h1 This is your cart
-    a(href='/') Click here to go home
     ul
       each cart in carts
-        li(class= '#{cart.id}') #{cart.product.name} $#{cart.product.price} x#{cart.quantity}
+        li(id= '#{cart.id}') #{cart.product.name} $#{cart.product.price}
+          span(class='quantity') x#{cart.quantity}
           button(OnClick="removeItem(#{cart.id})") Remove
-    button(onClick="checkout()").
-        Checkout
+          button(id="remove#{cart.id}",_quantity=cart.quantity, OnClick="removeOne(#{cart.id})") Remove 1
+          button(id="add#{cart.id}",_quantity=cart.quantity, OnClick="addOne(#{cart.id})") Add 1
+    a(href='/users/confirm')
+        button().
+            Checkout
+
 
 block javascript
     script(src="/scripts/cart.js")

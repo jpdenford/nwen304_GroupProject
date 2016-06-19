@@ -9,9 +9,9 @@ mixin navbar(user)
         a(class!=attributes.class, href='/') Home
       li
         if user
-          a(class!=attributes.class, href='/users/logout') logout
+          a(class!=attributes.class, href='/users/logout') Logout
         else
-          a(class!=attributes.class, href='/auth/google') login
+          a(class!=attributes.class, href='/auth/google') Login
       if user
         li(class='cart')
-          a(class!=attributes.class, href='/users/cart') cart
+          a(class!=attributes.class, href='/users/cart') Cart

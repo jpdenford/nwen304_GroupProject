@@ -37,5 +37,18 @@ router.get('/cart',
    });
 });
 
+router.get('/confirm',
+    helper.authedOrLogin,
+    function(req, res) {
+            req.user.getCarts({include: [models.Product]}).then(function (carts) {
+            var total = 0;
+            for(var i = 0; i < carts.length; i++){
+                total += carts[i].product.price * carts[i].quantity;
+            }
+            console.log(total)
+            res.render('payment', {user: req.user, carts: carts, total: total});
+        });
+    });
+
 
 module.exports = router;
