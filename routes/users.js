@@ -16,10 +16,10 @@ router.get('/logout', function(req, res){
 
 // GET /users/login
 router.get('/login', function(req, res){
-  res.render('login', { user: req.user });
+  res.redirect('/auth/google');
 });
 
-router.get('/login/success', 
+router.get('/profile', 
            helper.authedOrLogin,
            function(req, res) {
 
