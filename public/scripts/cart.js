@@ -5,7 +5,7 @@ function checkout(){
     $.ajax({
         method: 'POST',
         url: "/api/cart/buy",
-    }).then(function(data, error){
+    }).then(function(data, error) {
         //Need to do shit to show receipt now
         console.log(data);
         $("#content").html("<h2> Thank you </h2>");

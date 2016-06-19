@@ -9,10 +9,10 @@ block content
           button(OnClick="removeItem(#{cart.id})") Remove
           button(id="remove#{cart.id}",_quantity=cart.quantity, OnClick="removeOne(#{cart.id})") Remove 1
           button(id="add#{cart.id}",_quantity=cart.quantity, OnClick="addOne(#{cart.id})") Add 1
-    a(href='/users/confirm')
-        button().
-            Checkout
-
+    if carts.length != 0
+        a(href='/users/confirm')
+            button().
+                Checkout
 
 block javascript
     script(src="/scripts/cart.js")
