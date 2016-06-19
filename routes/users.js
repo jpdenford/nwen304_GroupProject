@@ -24,7 +24,14 @@ router.get('/profile',
            function(req, res) {
 
   req.user.getCarts({ include: [ models.Product ] }).then(function (carts) {
-      res.render('success', {user: req.user, carts: carts });
+      models.Order.findAll({
+          where: {
+              user_id: req.user.id
+          },
+          include: [models.OrderEntity]
+      }).then(function(orders){
+          res.render('success', {user: req.user, carts: carts, orders: orders });
+      });
   });
 });
 

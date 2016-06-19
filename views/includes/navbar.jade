@@ -7,11 +7,13 @@ mixin navbar(user)
       //- attributes == {class: "btn"}
       li
         a(class!=attributes.class, href='/') Home
+      if user
+        li(class='cart')
+          a(class!=attributes.class, href='/users/cart') Cart
+        li(class='profile')
+          a(class!=attributes.class, href='/users/profile') Profile
       li
         if user
           a(class!=attributes.class, href='/users/logout') Logout
         else
-          a(class!=attributes.class, href='/users/login') login
-      if user
-        li(class='cart')
-          a(class!=attributes.class, href='/users/cart') Cart
+          a(class!=attributes.class, href='/users/login') Login

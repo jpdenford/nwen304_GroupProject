@@ -77,7 +77,6 @@ router.post('/buy', function(req, res, next) {
         });
       });
     });
-
   });
 });
 

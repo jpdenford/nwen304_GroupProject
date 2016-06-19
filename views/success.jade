@@ -8,4 +8,12 @@ block content
   ul
     each cart in carts
       li #{cart.product.name} $#{cart.product.price} x#{cart.quantity}
-
+  ul
+    each order in orders
+      li Order purchased on #{order.createdAt.getDate()}/#{order.createdAt.getMonth()+1}/#{order.createdAt.getFullYear()}
+      ul
+        each o in order.order_entities
+          li
+            p Name: #{o.name}
+            p Quantity: #{o.quantity}
+            p Total Price: $#{o.total_price}
