@@ -34,6 +34,7 @@ router.param('id', function (req, res, next, param) {
 // Anyone can get this
 router.get('/', function(req, res, next) {
   models.Product.findAll().then(function(products) {
+    res.cacheControl({ maxAge: '30min', 'public': true });
     res.json({success: true, data: products});
   });
 });
@@ -81,7 +82,7 @@ router.get('/suggest', function(req, res, next) {
                 product_id: popular[i].id
               });
             }
-
+            res.cacheControl({ maxAge: '2h' });
             res.json({success: true, data: data});
           });
       });
@@ -115,6 +116,7 @@ router.post('/', helper.isAuthenicatedAdmin, function(req, res, next) {
 // Get an individual item
 // Anyone can get this
 router.get('/:id', function(req, res, next) {
+  res.cacheControl({ maxAge: '30min', 'public': true });
   res.json({ success: true, data: req.product });
 });
 
