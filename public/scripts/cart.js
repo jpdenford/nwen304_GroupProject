@@ -7,7 +7,6 @@ function checkout(){
         url: "/api/cart/buy",
     }).then(function(data, error) {
         //Need to do shit to show receipt now
-        console.log(data);
         $("#content").html("<h2> Thank you </h2>");
 
         var total = 0;
@@ -23,7 +22,6 @@ function addOne(id) {
     var idName = "#" + id;
     var quantity = parseInt($("#add" +id).attr("_quantity"));
     var value = quantity+1;
-    console.log(value);
     $.ajax({
         method: 'PATCH',
         url: "/api/cart/" + id,

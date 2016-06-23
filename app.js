@@ -36,32 +36,18 @@ passport.use(new GoogleStrategy({
       }, defaults: {lastaction: new Date(), isAdmin: false} 
     }).spread(function (user, created) {
         user.profile = profile;
-
-        db.Product.findAll().then(function(prods){
-          db.Cart.findOrCreate({
-              where: {
-                  user_id: user.id, product_id: prods[0].id
-              }, defaults: {quantity: 0}
-          }).spread(function (cart, created){
-              cart.quantity += 1;
-              cart.save().then(function(){
-                  done(undefined, user);
-              });
-          });
-        });
+        done(undefined, user);
     });
   }
 ));
 
 passport.serializeUser(function(user, done) {
-  //console.log("searial:" + user);
   user.update({fields: ["lastaction"]}).then(function() {
     done(null, user.id);
   });
 });
 
 passport.deserializeUser(function(obj, done) {
-  //console.log("obl:" +  obj);
     db.User.findById(obj).then(function(user) {
         done(null, user);
     });

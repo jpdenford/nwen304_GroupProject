@@ -40,7 +40,6 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/suggest', function(req, res, next) {
-  console.log(req.query);
   if (!req.query.city) {
     res.json({success: false, error: "no city supplied"});
     return;
@@ -75,7 +74,6 @@ router.get('/suggest', function(req, res, next) {
         var sequelize = models.Sequelize;
         sequelize.query(MostPopularItemSQL, { type: sequelize.QueryTypes.SELECT})
           .then(function(popular) {
-            console.log(popular);
 
             for (var i = 0; i < popular.length; i++ ) {
               data.push({

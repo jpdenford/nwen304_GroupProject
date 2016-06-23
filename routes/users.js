@@ -52,7 +52,6 @@ router.get('/confirm',
             for(var i = 0; i < carts.length; i++){
                 total += carts[i].product.price * carts[i].quantity;
             }
-            console.log(total)
             res.render('payment', {user: req.user, carts: carts, total: total});
         });
     });
