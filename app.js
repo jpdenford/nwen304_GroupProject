@@ -30,19 +30,20 @@ passport.use(new GoogleStrategy({
   function(request, accessToken, refreshToken, profile, done) {
     var profile = profile._json;
 
-    db.User.findOrCreate({ 
+    db.User.findOrCreate({
       where: {
-        googleId: profile.id, displayName: profile.displayName, imageUrl: profile.image.url 
-      }, defaults: {lastaction: new Date(), isAdmin: false} 
+        googleId: profile.id, displayName: profile.displayName, imageUrl: profile.image.url
+      }, defaults: { lastaction: new Date(), isAdmin: false}
     }).spread(function (user, created) {
         user.profile = profile;
+        user.lastaction = new Date();
         done(undefined, user);
     });
   }
 ));
 
 passport.serializeUser(function(user, done) {
-  user.update({fields: ["lastaction"]}).then(function() {
+  user.update({lastaction: user.lastaction }).then(function(user) {
     done(null, user.id);
   });
 });
