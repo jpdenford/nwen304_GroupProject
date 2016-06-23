@@ -62,7 +62,7 @@ var sessionOpt = {
   secret: 'cookie_secret',
   name:   'kaas',
   saveUninitialized: true,
-  resave: true
+  resave: false
 }
 
 //force https in production
