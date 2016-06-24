@@ -1,0 +1,769 @@
+{
+	"variables": [],
+	"info": {
+		"name": "NWEN304 Group Project",
+		"_postman_id": "f16bd276-8da3-c29b-ffc0-ce5cbae7730b",
+		"description": "Group Project API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Admin",
+			"description": "",
+			"item": [
+				{
+					"name": "Add Product",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": "var jsonData = JSON.parse(responseBody);\n\ntests[\"Status code is 200\"] = responseCode.code === 200;\nif(jsonData.success){\n    postman.setEnvironmentVariable(\"prod_id\", jsonData.data.id);    \n}\n\n"
+							}
+						}
+					],
+					"request": {
+						"url": "{{url}}/api/products",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Cookie",
+								"value": "{{userCookei}}",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\":\"test_item\",\n    \"price\": 1.23\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "products have \"test_item\"",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": "var schema = {\n    \"type\" : \"object\",\n    \"properties\": {\n        \"success\" :{\n            \"type\":\"boolean\"\n        },\n        \"data\":{\n            \"type\":\"array\",\n            \"items\":{\n                \"type\":\"object\"\n            }\n        }\n    }\n};\nfunction hasItem(name,reqData){\n    if(reqData.success === false) return false;\n    var data = reqData.data;\n    for(var i = 0; i < data.length; i++){\n        if(data[i].name === name) return true;\n    }\n    return false;\n}\nvar jsonData = JSON.parse(responseBody);\ntests[\"Valid Data\"] = tv4.validate(jsonData, schema);\ntests[\"is caching for 30min\"] = (postman.getResponseHeader(\"Cache-Control\").has(\"max-age=1800\"));\ntests[\"have test_item\"] = hasItem('test_item',jsonData);"
+							}
+						}
+					],
+					"request": {
+						"url": "{{url}}/api/products",
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Update Product",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": "var jsonData = JSON.parse(responseBody);\n\ntests[\"Status code is 200\"] = responseCode.code === 200;\nif(jsonData.success){\n    postman.setEnvironmentVariable(\"prod_id\", jsonData.data.id);    \n}\n\n"
+							}
+						}
+					],
+					"request": {
+						"url": "{{url}}/api/products/{{prod_id}}",
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							},
+							{
+								"key": "Cookie",
+								"value": "{{userCookei}}",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\":\"test2_item\",\n    \"price\": 1.23\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "products have \"test2_item\"",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": "var schema = {\n    \"type\" : \"object\",\n    \"properties\": {\n        \"success\" :{\n            \"type\":\"boolean\"\n        },\n        \"data\":{\n            \"type\":\"array\",\n            \"items\":{\n                \"type\":\"object\"\n            }\n        }\n    }\n};\nfunction hasItem(name,reqData){\n    if(reqData.success === false) return false;\n    var data = reqData.data;\n    for(var i = 0; i < data.length; i++){\n        if(data[i].name === name) return true;\n    }\n    return false;\n}\nvar jsonData = JSON.parse(responseBody);\ntests[\"Valid Data\"] = tv4.validate(jsonData, schema);\ntests[\"is caching for 30min\"] = (postman.getResponseHeader(\"Cache-Control\").has(\"max-age=1800\"));\ntests[\"have test_item\"] = hasItem('test2_item',jsonData);"
+							}
+						}
+					],
+					"request": {
+						"url": "{{url}}/api/products",
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Remove Product",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": "var jsonData = JSON.parse(responseBody);\n\ntests['id is the same'] = jsonData.data.id === JSON.parse(environment.prod_id);\ntests[\"Status code is 200\"] = responseCode.code === 200;\n"
+							}
+						}
+					],
+					"request": {
+						"url": "{{url}}/api/products/{{prod_id}}",
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\":\"test_item\",\n    \"price\": 1.23\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "products dont have \"test2_item\"",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": "var schema = {\n    \"type\" : \"object\",\n    \"properties\": {\n        \"success\" :{\n            \"type\":\"boolean\"\n        },\n        \"data\":{\n            \"type\":\"array\",\n            \"items\":{\n                \"type\":\"object\"\n            }\n        }\n    }\n};\nfunction hasItem(name,reqData){\n    if(reqData.success === false) return false;\n    var data = reqData.data;\n    for(var i = 0; i < data.length; i++){\n        if(data[i].name === name) return true;\n    }\n    return false;\n}\nvar jsonData = JSON.parse(responseBody);\ntests[\"Valid Data\"] = tv4.validate(jsonData, schema);\ntests[\"is caching for 30min\"] = (postman.getResponseHeader(\"Cache-Control\").has(\"max-age=1800\"));\ntests[\"have test_item\"] = !hasItem('test2_item',jsonData);"
+							}
+						}
+					],
+					"request": {
+						"url": "{{url}}/api/products",
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Both",
+			"description": "",
+			"item": [
+				{
+					"name": "Single Product",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": "var schema = {\n    \"type\" : \"object\",\n    \"properties\": {\n        \"success\" :{\n            \"type\":\"boolean\"\n        },\n        \"data\":{\n            \"type\":\"object\",\n            \"properties\":{\n                \"id\":{\n                    \"type\":\"integer\"\n                },\n                \"price\":{\n                    \"type\":\"string\"\n                },\n                \"name\":{\n                    \"type\":\"string\"\n                }\n            }\n        }\n    }\n};\nvar jsonData = JSON.parse(responseBody);\ntests[\"Valid Data\"] = tv4.validate(jsonData, schema);\ntests[\"Success true\"] = jsonData.success === true;\ntests[\"is caching for 30min\"] = (postman.getResponseHeader(\"Cache-Control\").has(\"max-age=1800\"));"
+							}
+						}
+					],
+					"request": {
+						"url": "{{url}}/api/products/1",
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "products",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": "var schema = {\n    \"type\" : \"object\",\n    \"properties\": {\n        \"success\" :{\n            \"type\":\"boolean\"\n        },\n        \"data\":{\n            \"type\":\"array\",\n            \"items\":{\n                \"type\":\"object\"\n            }\n        }\n    }\n};\nvar jsonData = JSON.parse(responseBody);\ntests[\"Valid Data\"] = tv4.validate(jsonData, schema);\ntests[\"is caching for 30min\"] = (postman.getResponseHeader(\"Cache-Control\").has(\"max-age=1800\"));"
+							}
+						}
+					],
+					"request": {
+						"url": "{{url}}/api/products",
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Static files (stylesheet)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": "tests[\"Status code is 200\"] = responseCode.code === 200;\ntests[\"is caching for 24h\"] = (postman.getResponseHeader(\"Cache-Control\").has(\"max-age=86400\"));"
+							}
+						}
+					],
+					"request": {
+						"url": "{{url}}/stylesheets/style.css",
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Product suggestion",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": "var jsonData = JSON.parse(responseBody);\ntests[\"Successful geo\"] = jsonData.success === true;"
+							}
+						}
+					],
+					"request": {
+						"url": "{{url}}/api/products/suggest?city=Wellington",
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Logged In",
+			"description": "",
+			"item": [
+				{
+					"name": "Index - logged in",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": "tests[\"Status code is 200\"] = responseCode.code === 200;\ntests[\"Body has string\"] = !responseBody.has(\"login\");\ntests[\"Body hasnt string\"] = responseBody.has(\"logout\");"
+							}
+						}
+					],
+					"request": {
+						"url": "{{url}}/",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{userCookie}}",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"enabled": true
+								}
+							]
+						},
+						"description": "Request index"
+					},
+					"response": []
+				},
+				{
+					"name": "profile",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": "tests[\"Body has string 'Hello'\"] = responseBody.has(\"Hello\");\ntests[\"Body has string 'Cart'\"] = responseBody.has(\"Cart\");"
+							}
+						}
+					],
+					"request": {
+						"url": "{{url}}/users/profile",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{userCookie}}",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "view cart",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": "tests[\"Body matches string\"] = responseBody.has(\"This is your cart\");"
+							}
+						}
+					],
+					"request": {
+						"url": "{{url}}/users/cart",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{userCookie}}",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "api cart",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": "var schema = {\n    \"type\" : \"object\",\n    \"properties\": {\n        \"success\" :{\n            \"type\":\"boolean\"\n        },\n        \"data\":{\n            \"type\":\"array\"\n        }\n    }\n};\nvar jsonData = JSON.parse(responseBody);\ntests[\"Valid Data\"] = tv4.validate(jsonData, schema);\ntests['is successful'] = jsonData.success === true;\ntests[\"is not caching\"] = (postman.getResponseHeader(\"Cache-Control\") === null || postman.getResponseHeader(\"Cache-Control\").has(\"max-age=0\"));"
+							}
+						}
+					],
+					"request": {
+						"url": "{{url}}/api/cart",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{userCookie}}",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "#11 api cart - add item",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": "var schema = {\n    \"type\" : \"object\",\n    \"properties\": {\n        \"success\" :{\n            \"type\":\"boolean\"\n        },\n        \"data\":{\n            \"type\":\"object\"\n        }\n    }\n};\n\nvar jsonData = JSON.parse(responseBody);\ntests[\"Valid Data\"] = tv4.validate(jsonData, schema);\ntests['request is successful'] = jsonData.success === true;\ntests['order not empty'] = (jsonData.data && jsonData.data.length !== 0);\n\n\npostman.setEnvironmentVariable(\"item_id\", jsonData.data.id);"
+							}
+						}
+					],
+					"request": {
+						"url": "{{url}}/api/cart",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{userCookie}}",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "product_id",
+									"value": "1",
+									"type": "text",
+									"enabled": true
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "#12 api cart - 1 item in, 1 quantity",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": "var schema = {\n    \"type\" : \"object\",\n    \"properties\": {\n        \"success\" :{\n            \"type\":\"boolean\"\n        },\n        \"data\":{\n            \"type\":\"array\"\n        }\n    }\n};\nvar jsonData = JSON.parse(responseBody);\ntests[\"Valid Data\"] = tv4.validate(jsonData, schema);\ntests['is successful'] = jsonData.success === true;\ntests['1 item present'] = jsonData.data.length === 1;\ntests['item quantity is 1'] = jsonData.data[0].quantity === 1;\ntests[\"is not caching\"] = (postman.getResponseHeader(\"Cache-Control\") === null || postman.getResponseHeader(\"Cache-Control\").has(\"max-age=0\"));"
+							}
+						}
+					],
+					"request": {
+						"url": "{{url}}/api/cart",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{userCookie}}",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "#13 api cart - update quantity to 2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": "var schema = {\n    \"type\" : \"object\",\n    \"properties\": {\n        \"success\" :{\n            \"type\":\"boolean\"\n        },\n        \"data\":{\n            \"type\":\"object\"\n        }\n    }\n};\nvar jsonData = JSON.parse(responseBody);\ntests[\"Valid Data\"] = tv4.validate(jsonData, schema);\ntests['is successful'] = jsonData.success === true;\ntests['id correct'] = jsonData.data.id === JSON.parse(environment[\"item_id\"]);\ntests['quantity correct'] = jsonData.data.quantity === 2;\ntests[\"is not caching\"] = (postman.getResponseHeader(\"Cache-Control\") === null || postman.getResponseHeader(\"Cache-Control\").has(\"max-age=0\"));"
+							}
+						}
+					],
+					"request": {
+						"url": "{{url}}/api/cart/{{item_id}}",
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{userCookie}}",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "quantity",
+									"value": "2",
+									"type": "text",
+									"enabled": true
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "#14 api cart - buy items (had items in cart)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": "var schema = {\n    \"type\" : \"object\",\n    \"properties\": {\n        \"success\" :{\n            \"type\":\"boolean\"\n        },\n        \"data\":{\n            \"type\":\"array\",\n            \"items\":{\n                \"type\":\"object\"\n            }\n        }\n    }\n};\n\nvar jsonData = JSON.parse(responseBody);\ntests[\"Valid Data\"] = tv4.validate(jsonData, schema);\ntests['request is successful'] = jsonData.success === true;\ntests['order not empty'] = (jsonData.data && jsonData.data.length !== 0);"
+							}
+						}
+					],
+					"request": {
+						"url": "{{url}}/api/cart/buy",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{userCookie}}",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "#15 api cart is empty",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": "var jsonData = JSON.parse(responseBody);\ntests['request is successful'] = jsonData.success === true;\ntests['cart is empty'] = (jsonData.data && jsonData.data.length === 0);"
+							}
+						}
+					],
+					"request": {
+						"url": "{{url}}/api/cart",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{userCookie}}",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "#21 api cart - add item",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": "var schema = {\n    \"type\" : \"object\",\n    \"properties\": {\n        \"success\" :{\n            \"type\":\"boolean\"\n        },\n        \"data\":{\n            \"type\":\"object\"\n        }\n    }\n};\n\nvar jsonData = JSON.parse(responseBody);\ntests[\"Valid Data\"] = tv4.validate(jsonData, schema);\ntests['request is successful'] = jsonData.success === true;\ntests['order not empty'] = (jsonData.data && jsonData.data.length !== 0);\n\n\npostman.setEnvironmentVariable(\"item_id\", jsonData.data.id);"
+							}
+						}
+					],
+					"request": {
+						"url": "{{url}}/api/cart",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{userCookie}}",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "product_id",
+									"value": "1",
+									"type": "text",
+									"enabled": true
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "#22 api cart - delete item",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": "var schema = {\n    \"type\" : \"object\",\n    \"properties\": {\n        \"success\" :{\n            \"type\":\"boolean\"\n        },\n        \"data\":{\n            \"type\":\"object\"\n        }\n    }\n};\nvar jsonData = JSON.parse(responseBody);\ntests[\"Valid Data\"] = tv4.validate(jsonData, schema);\ntests['is successful'] = jsonData.success === true;\ntests['id correct'] = jsonData.data.id === JSON.parse(environment[\"item_id\"]);\ntests['quantity correct'] = jsonData.data.quantity === 1;\ntests[\"is not caching\"] = (postman.getResponseHeader(\"Cache-Control\") === null || postman.getResponseHeader(\"Cache-Control\").has(\"max-age=0\"));"
+							}
+						}
+					],
+					"request": {
+						"url": "{{url}}/api/cart/{{item_id}}",
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{userCookie}}",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "quantity",
+									"value": "2",
+									"type": "text",
+									"enabled": true
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "#23 api cart is empty",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": "var jsonData = JSON.parse(responseBody);\ntests['request is successful'] = jsonData.success === true;\ntests['cart is empty'] = (jsonData.data && jsonData.data.length === 0);"
+							}
+						}
+					],
+					"request": {
+						"url": "{{url}}/api/cart",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{userCookie}}",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "#31 api cart - add item copy",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": "var schema = {\n    \"type\" : \"object\",\n    \"properties\": {\n        \"success\" :{\n            \"type\":\"boolean\"\n        },\n        \"data\":{\n            \"type\":\"object\"\n        }\n    }\n};\n\nvar jsonData = JSON.parse(responseBody);\ntests[\"Valid Data\"] = tv4.validate(jsonData, schema);\ntests['request is successful'] = jsonData.success === true;\ntests['order not empty'] = (jsonData.data && jsonData.data.length !== 0);\n\n\npostman.setEnvironmentVariable(\"item_id\", jsonData.data.id);"
+							}
+						}
+					],
+					"request": {
+						"url": "{{url}}/api/cart",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{userCookie}}",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "product_id",
+									"value": "1",
+									"type": "text",
+									"enabled": true
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "#32 view cart",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": "tests[\"Body has string 'this is your cart'\"] = responseBody.has(\"This is your cart\");\ntests[\"Body has string 'x1' \"] = responseBody.has(\"x1\");"
+							}
+						}
+					],
+					"request": {
+						"url": "{{url}}/users/cart",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "{{userCookie}}",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Not Logged In",
+			"description": "",
+			"item": [
+				{
+					"name": "Index - not logged in",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": "tests[\"Status code is 200\"] = responseCode.code === 200;\ntests[\"Body has string\"] = responseBody.has(\"login\");\ntests[\"Body hasnt string\"] = !responseBody.has(\"logout\");"
+							}
+						}
+					],
+					"request": {
+						"url": "{{url}}/",
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"enabled": true
+								}
+							]
+						},
+						"description": "Request index"
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

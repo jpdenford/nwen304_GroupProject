@@ -1,0 +1,59 @@
+#-------Admin-------#
+#/api/products
+curl -X POST -H "Content-Type: application/json" -H "Cookie: {{userCookei}}" -H "Cache-Control: no-cache" -d '{
+    "name":"test_item",
+    "price": 1.23
+}' "https://nwen304-team13.herokuapp.com/api/products"
+
+# /api/products
+curl -X GET -H "Cache-Control: no-cache" "https://nwen304-team13.herokuapp.com/api/products"
+
+#/api/products/1
+curl -X PUT -H "Content-Type: application/json" -H "Cookie: {{userCookei}}" -H "Cache-Control: no-cache" -d '{
+    "name":"test2_item",
+    "price": 1.23
+}' "https://nwen304-team13.herokuapp.com/api/products/1"
+
+#/api/products/1
+curl -X DELETE -H "Content-Type: application/json" -H "Cache-Control: no-cache" -d '{
+    "name":"test_item",
+    "price": 1.23
+}' "https://nwen304-team13.herokuapp.com/api/products/1"
+
+#-------Both-------#
+#/api/products/1
+curl -X GET -H "Cache-Control: no-cache" "https://nwen304-team13.herokuapp.com/api/products/1"
+
+#/api/products
+curl -X GET -H "Cache-Control: no-cache" "https://nwen304-team13.herokuapp.com/api/products"
+
+#/stylesheets/style.css
+curl -X GET -H "Cache-Control: no-cache" "https://nwen304-team13.herokuapp.com/stylesheets/style.css"
+
+#/api/products/suggest?city=Wellington
+curl -X GET -H "Cache-Control: no-cache" "https://nwen304-team13.herokuapp.com/api/products/suggest?city=Wellington"
+
+#-------Logged In-------#
+#/
+curl -X GET -H "Cookie: kaas=s%3A8FGFh2bENfNW-FoiQxl3zAOgaXC9ymmD.nZ0JvOKLLLd0k5A7qIgqT2EP5ps4mgUGD9GZPzQ1h2o" -H "Cache-Control: no-cache" "https://nwen304-team13.herokuapp.com/"
+
+#/users/profile
+curl -X GET -H "Cookie: kaas=s%3A8FGFh2bENfNW-FoiQxl3zAOgaXC9ymmD.nZ0JvOKLLLd0k5A7qIgqT2EP5ps4mgUGD9GZPzQ1h2o" -H "Cache-Control: no-cache" "https://nwen304-team13.herokuapp.com/users/profile"
+
+#/users/cart
+curl -X GET -H "Cookie: kaas=s%3A8FGFh2bENfNW-FoiQxl3zAOgaXC9ymmD.nZ0JvOKLLLd0k5A7qIgqT2EP5ps4mgUGD9GZPzQ1h2o" -H "Cache-Control: no-cache" "https://nwen304-team13.herokuapp.com/users/cart"
+
+#/api/cart
+curl -X GET -H "Cookie: kaas=s%3A8FGFh2bENfNW-FoiQxl3zAOgaXC9ymmD.nZ0JvOKLLLd0k5A7qIgqT2EP5ps4mgUGD9GZPzQ1h2o" -H "Cache-Control: no-cache" "https://nwen304-team13.herokuapp.com/api/cart"
+
+#/api/cart
+curl -X POST -H "Cookie: kaas=s%3A8FGFh2bENfNW-FoiQxl3zAOgaXC9ymmD.nZ0JvOKLLLd0k5A7qIgqT2EP5ps4mgUGD9GZPzQ1h2o" -H "Cache-Control: no-cache" -H "Content-Type: application/x-www-form-urlencoded" -d 'product_id=1' "https://nwen304-team13.herokuapp.com/api/cart"
+
+#/api/cart/1
+curl -X PATCH -H "Cookie: kaas=s%3A8FGFh2bENfNW-FoiQxl3zAOgaXC9ymmD.nZ0JvOKLLLd0k5A7qIgqT2EP5ps4mgUGD9GZPzQ1h2o" -H "Cache-Control: no-cache" -H "Content-Type: application/x-www-form-urlencoded" -d 'quantity=2' "https://nwen304-team13.herokuapp.com/api/cart/10"
+
+#/api/cart/buy
+curl -X POST -H "Cookie: kaas=s%3A8FGFh2bENfNW-FoiQxl3zAOgaXC9ymmD.nZ0JvOKLLLd0k5A7qIgqT2EP5ps4mgUGD9GZPzQ1h2o" -H "Cache-Control: no-cache" "https://nwen304-team13.herokuapp.com/api/cart/buy"
+
+#/api/cart/1
+curl -X DELETE -H "Cookie: kaas=s%3A8FGFh2bENfNW-FoiQxl3zAOgaXC9ymmD.nZ0JvOKLLLd0k5A7qIgqT2EP5ps4mgUGD9GZPzQ1h2o" -H "Cache-Control: no-cache" -H "Content-Type: application/x-www-form-urlencoded" -d 'quantity=2' "https://nwen304-team13.herokuapp.com/api/cart/10"
